@@ -1,0 +1,61 @@
+name: Build Windows
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          cd src
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: |
+          cd src
+          pytest
+
+      - name: Build executable
+        run: |
+          cd src
+          flet build windows --module-name app.py --project app
+
+      - name: Rename build directory
+        run: |
+          Rename-Item -Path src/build/windows -NewName nano-fertilizers-mixer-utility
+        shell: pwsh
+
+      - name: Archive build artifact
+        run: |
+          Compress-Archive -Path src/build/nano-fertilizers-mixer-utility -DestinationPath build-windows.zip
+        shell: pwsh
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-windows
+          path: build-windows.zip
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./build-windows.zip
+          asset_name: build-windows.zip
+          asset_content_type: application/zip

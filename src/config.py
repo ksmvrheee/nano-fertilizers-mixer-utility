@@ -15,4 +15,4 @@ NAVIGATION_MENU_BUTTON_STYLE = ft.ButtonStyle(padding=ft.padding.symmetric(verti
 
 UNIFIED_BUTTON_STYLE = ft.ButtonStyle(padding=ft.padding.symmetric(vertical=15, horizontal=18),
                                       text_style=ft.TextStyle(size=16, weight=ft.FontWeight.W_500))
-VERSION = '1.0.2'
+VERSION = '1.0.3'

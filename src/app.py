@@ -1,5 +1,8 @@
+import flet as ft
+
 from components.menu_bar import NavigationMenu
-from config import *
+from config import COLOR_THEME_SEED, PAGE_BASIC_WIDTH, PAGE_BASIC_HEIGHT, PAGE_MAX_WIDTH, PAGE_MAX_HEIGHT, \
+    PAGE_MIN_HEIGHT, PAGE_MIN_WIDTH, VERSION
 from database import initialize_db
 from routing import ROUTES
 

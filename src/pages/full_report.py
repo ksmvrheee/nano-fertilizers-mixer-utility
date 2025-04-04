@@ -184,6 +184,8 @@ class FullReportPage(ft.Control):
                       .having(fn.COUNT(Plant.id) > 0)
                       .order_by(PlantCategory.name))
 
+        mixtures = FertilizingMixture.select()
+
         if not len(categories):
             current_cell = ws.cell(row=current_row, column=1, value='Данные не найдены.')
             current_cell.font = red_italic_font
@@ -275,6 +277,7 @@ class FullReportPage(ft.Control):
                     if not calculation_result['success']:
                         current_cell = ws.cell(row=current_row, column=1, value=calculation_result['error'])
                         current_cell.font = red_italic_font
+                        current_row += 2
 
                     else:
                         mixture_data = calculation_result['mixture']
@@ -371,11 +374,23 @@ class FullReportPage(ft.Control):
 
                         current_row += 2
 
+        current_cell = ws.cell(row=current_row, column=1, value='Цена за грамм удобрительной смеси')
+        current_cell.font = black_bold_font
+        current_row += 1
+
+        for mixture in mixtures:
+            current_cell = ws.cell(row=current_row, column=1, value=mixture.name)
+            current_cell.font = black_regular_font
+            current_cell = ws.cell(row=current_row, column=2, value=f'{mixture.price_per_gram} руб.')
+            current_cell.font = black_regular_font
+
+            current_row += 1
+
         # hardcoding the columns' widths for readability
         # because their possible limits are known
         ws.column_dimensions['A'].width = 32
         ws.column_dimensions['B'].width = 10
-        ws.column_dimensions['C'].width = 15
+        ws.column_dimensions['C'].width = 20
 
         try:
             self.lock_window_closing()

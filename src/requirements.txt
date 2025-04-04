@@ -1,4 +1,4 @@
-flet==0.26.0
+flet
 peewee==3.17.9
 pulp==3.1.1
 openpyxl==3.1.5
